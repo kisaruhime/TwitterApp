@@ -120,10 +120,9 @@ public class TwitterUtils {
         ResponseList<Status> statuses ;
         try {
             statuses = twitter.getUserTimeline(user, page);
-            System.out.println("Showing @" + user + "'s user timeline.");
             for (Status status : statuses) {
                 if (status.getInReplyToScreenName() != null && status.getInReplyToScreenName().equals(sourceUser)) {
-                    PostgresUtils.insertTweets(conn, status, sourceUser);
+                    PostgresUtils.insertTweetsToReplyTable(conn, status, sourceUser);
                 }
             }
         }catch (TwitterException e){

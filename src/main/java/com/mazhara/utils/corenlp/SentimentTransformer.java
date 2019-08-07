@@ -10,12 +10,10 @@ public class SentimentTransformer {
         SentimentAnalyzer sentimentAnalyzer = new SentimentAnalyzer();
         sentimentAnalyzer.initialize();
         SentimentResult sentimentResult = sentimentAnalyzer.getSentimentResult(text);
-
         List<Object> list = new ArrayList<Object>();
 
-        System.out.println("Sentiment Score: " + sentimentResult.getSentimentScore());
-        System.out.println("Sentiment Type: " + sentimentResult.getSentimentType());
-
+//        System.out.println("Sentiment Score: " + sentimentResult.getSentimentScore());
+//        System.out.println("Sentiment Type: " + sentimentResult.getSentimentType());
 
         return new SentimentValues(sentimentResult.getSentimentScore(),sentimentResult.getSentimentType());
 
