@@ -28,11 +28,12 @@ def tokenization_and_stem(sentence):
     tokens = nltk.word_tokenize(sentence)
     for token in tokens:
         if token not in stopwords:
-            token_ls.append(token)
+            #token_ls.append(token)
             snowballstemmer_token_ls.append(snowballstemmer.stem(token))
-    total_token_ls.append(token_ls)
+    #total_token_ls.append(token_ls)
     total_snowballstemmer_token_ls.append(snowballstemmer_token_ls)
-    return back_to_clean_sent(total_token_ls), back_to_clean_sent(total_snowballstemmer_token_ls)
+    return back_to_clean_sent(total_snowballstemmer_token_ls)
+    #return back_to_clean_sent(total_token_ls), back_to_clean_sent(total_snowballstemmer_token_ls)
 
 
 
@@ -49,10 +50,14 @@ def back_to_clean_sent(token_ls):
         clean_sent_ls.append(clean_sent)
     return clean_sent_ls
 
+
 def tweet_clenear_for_scikit_learn(df, col):
+
     df_clean = df.copy()
     df_clean[col] = df_clean[col].str.lower()
-    df_clean[col] = df_clean[col].apply(lambda elem: re.sub(r"(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)|^rt|http.+?",
-                                                "", elem))
+    df_clean[col] = df_clean[col].apply(lambda elem: tweets_cleaner(elem))
+    df_clean[col] = df_clean[col].apply(lambda elem: tokenization_and_stem(elem)[0])
+    # df_clean[col] = df_clean[col].apply(lambda elem: re.sub(r"(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)|^rt|http.+?",
+    #                                             "", elem))
 
     return df_clean

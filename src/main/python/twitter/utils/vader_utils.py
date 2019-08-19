@@ -28,17 +28,17 @@ def get_sentiment(scores):
     return sentiment, score
 
 
-def process_text(text, id):
-    connection = get_connection()
-    sentences = divide_text(text)
-    for sentence in sentences:
-        scores = sentiment_analyzer_scores(sentence)
-        sentiment, score = get_sentiment(scores)
-        insert_sentiment(sentiment, score, id, connection)
-    print("All lines have benn processed")
+# def process_text(text, id):
+#     connection = get_connection()
+#     sentences = divide_text(text)
+#     for sentence in sentences:
+#         scores = sentiment_analyzer_scores(sentence)
+#         sentiment, score = get_sentiment(scores)
+#         insert_sentiment(sentiment, score, id, connection)
+#     print("All lines have benn processed")
 
 
-def process_text_without_postgres(text):
+def prcss_text(text):
     sentences = divide_text(text)
     for sentence in sentences:
         scores = sentiment_analyzer_scores(sentence)

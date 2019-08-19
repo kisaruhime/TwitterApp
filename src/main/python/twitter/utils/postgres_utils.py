@@ -1,5 +1,4 @@
 import os
-# from twitter.utils.сonnector import get_connection
 from sqlalchemy.sql import text
 from sqlalchemy import create_engine
 
@@ -41,25 +40,21 @@ def insert_sentiment(sentiment, score, id, col1, col2):
             SET {0} = {1}, {2} = '{3}' \
             WHERE id = {4}"\
         .format(col1, score, col2, sentiment, id)
-    cursor = connection.execute(text(sql).execution_options(autocommit=True))
+    connection.execute(text(sql).execution_options(autocommit=True))
 
 
-def insert_clean_text(text, id, col1):
+def insert_clean_text(text, id):
     connection = get_connection()
-    conn = connection.connect()
-    if "\'" in text:
-        text = text.replace("\'", "\''")
-
+    if text.find("'"):
+        text = text.replace("'", "''")
     sql = "UPDATE replies_from_dm_me_your_cats_friends \
-            SET {0} = '{1}'\
-            WHERE id = {2}".format(col1, text, id)
-
+            SET clean_after_python_text = '{0}' WHERE id = {1}".format(text, id)
     print(sql)
-    cursor = conn.execute(text(sql))
+    connection.execute(text(sql).execution_options(autocommit=True))
 
 
 def insert_clsf_sentiment(score, id, col1, col2):
-    sentiment = "positive" if score == 0 else "negative"
+    sentiment = "positive" if score == 1 else "negative"
     connection = get_connection()
     sql = "UPDATE replies_from_dm_me_your_cats_friends \
             SET {0} = '{1}' ," \
@@ -67,6 +62,14 @@ def insert_clsf_sentiment(score, id, col1, col2):
             WHERE id = {4}" \
         .format(col1, sentiment, col2, score, id)
     connection.execute(text(sql).execution_options(autocommit=True))
+
+
+def get_ids_text():
+    connection = get_connection()
+    sql = "SELECT id, original_text FROM replies_from_dm_me_your_cats_friends"
+    cursor = connection.execute(text(sql)
+                                .execution_options(autocommit=True))
+    return cursor
 
 
 

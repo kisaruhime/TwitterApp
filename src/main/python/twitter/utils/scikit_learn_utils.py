@@ -8,8 +8,30 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
 from sklearn.naive_bayes import MultinomialNB
 import numpy as np
+import time
+from twitter.utils.text_utils import tweet_clenear_for_scikit_learn
 from sklearn.model_selection import GridSearchCV
 
+
+def train_model(train, test):
+
+
+    train_clean = tweet_clenear_for_scikit_learn(train, "tweet")
+    test_clean = tweet_clenear_for_scikit_learn(test, "tweet")
+    train_upsampled = upsampling(train_clean)
+    model_MNB = apply_MNB(train_upsampled)
+
+    #model_SGDClassifier = apply_SGDClassifier_pipeline(train_upsampled)
+
+    start = time.time()
+    params_nb = apply_grid(model_MNB, train_upsampled,
+                           get_params_for_MultinomialNB('vect', 'tfidf', 'clf'))
+    end = time.time()
+    print("Grid execution time for MultinomialNB is {0}, params are {1}"
+          .format((end - start), params_nb))
+    test_nb, model_MNB = apply_MNB(train_upsampled, params_nb, test_clean)
+
+    return model_MNB
 
 
 
@@ -66,7 +88,7 @@ def apply_SGDClassifier_pipeline(df, params=None, test=None):
     return model
 
 
-def apply_MultinomialNB_pipeline(df, params=None, test=None):
+def apply_MNB(df, params=None, test=None):
 
     vect_name = 'vect'
     transf_name = 'tfidf'
