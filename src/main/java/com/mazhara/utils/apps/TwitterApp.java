@@ -4,7 +4,7 @@ import com.mazhara.utils.twitter.TwitterUtils;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import java.sql.Connection;
-import java.util.List;
+
 
 
 public class TwitterApp {
@@ -13,18 +13,21 @@ public class TwitterApp {
 
         Twitter twitter = new TwitterFactory(TwitterUtils.getConfigs()).getInstance();
 
-        String user = System.getenv("TWITTER_USER");
-        System.out.println(user);
+
+        String user1 = System.getenv("USER1");
+        String user2 = System.getenv("USER2");
+
+        System.out.println("User 1: "+user1);
+        System.out.println("User 2: "+user2);
 
         Connection connection = PostgresUtils.connectToPostgres();
 
-        PostgresUtils.createReplyTable(connection, user);
+        PostgresUtils.createTable(connection, user1);
+        PostgresUtils.createTable(connection, user2);
 
-        List<Long> friends =  TwitterUtils.getUsersFriendsIds(twitter, user);
+        TwitterUtils.storeUserTweets(twitter, user1, 1000, connection, user2);
+        TwitterUtils.storeUserTweets(twitter, user2, 1000, connection, user1);
 
-        for (Long friend: friends){
-            TwitterUtils.storeUserTweets(twitter, friend, 100, user, connection);
-        }
 
     }
 

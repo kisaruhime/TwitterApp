@@ -12,16 +12,28 @@ public class CoreNLPApp {
 
         Connection connection = PostgresUtils.connectToPostgres();
 
-        String user = System.getenv("TWITTER_USER");
-        System.out.println(user);
+        String user1 = System.getenv("USER1");
+        String user2 = System.getenv("USER2");
 
-        PostgresUtils.cleanTextField(connection, user);
+        System.out.println("User 1: "+user1);
+        System.out.println("User 2: "+user2);
+
+        PostgresUtils.cleanTextField(connection, user1);
+        PostgresUtils.cleanTextField(connection, user2);
+
+        CoreNLPApp.getAndInsertSentiment(connection, user1);
+        CoreNLPApp.getAndInsertSentiment(connection, user2);
+
+
+    }
+
+    public static void getAndInsertSentiment(Connection connection, String user){
 
         ResultSet resultSet = PostgresUtils.getAllTweets(connection, user);
         SentimentTransformer transformer = new SentimentTransformer();
         try{
             while (resultSet.next()) {
-                String tweet = resultSet.getString("clean_after_java_text");
+                String tweet = resultSet.getString("clean_text");
                 long id = resultSet.getLong("id");
                 SentimentTransformer.SentimentValues values = transformer.getSentiment(tweet);
                 PostgresUtils.insertSentiment(connection, user, values.getSentimentScore(), values.sentimentType, id);
@@ -29,7 +41,6 @@ public class CoreNLPApp {
         }catch (SQLException e){
             System.out.println(e.getMessage());
         }
-
 
     }
 

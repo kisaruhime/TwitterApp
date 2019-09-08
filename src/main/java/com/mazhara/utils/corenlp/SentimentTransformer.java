@@ -12,9 +12,6 @@ public class SentimentTransformer {
         SentimentResult sentimentResult = sentimentAnalyzer.getSentimentResult(text);
         List<Object> list = new ArrayList<Object>();
 
-//        System.out.println("Sentiment Score: " + sentimentResult.getSentimentScore());
-//        System.out.println("Sentiment Type: " + sentimentResult.getSentimentType());
-
         return new SentimentValues(sentimentResult.getSentimentScore(),sentimentResult.getSentimentType());
 
     }
