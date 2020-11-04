@@ -184,12 +184,10 @@ def define_logger():
 
 
 
-
-
 def run():
-    # user1 = os.environ['USER1']
-    # user2 = os.environ['USER2']
-    user1, user2 = "John00053383", "Karl75202714"
+
+    user1 = os.environ['USER1']
+    user2 = os.environ['USER2']
 
     define_logger()
 

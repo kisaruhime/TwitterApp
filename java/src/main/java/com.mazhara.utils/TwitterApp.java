@@ -16,11 +16,8 @@ public class TwitterApp {
 
         Twitter twitter = new TwitterFactory(TwitterUtils.getConfigs()).getInstance();
 
-//        String user1 = System.getenv("USER1");
-//        String user2 = System.getenv("USER2");
-
-        String user1 = "John00053383";
-        String user2 = "Karl75202714";
+        String user1 = System.getenv("USER1");
+        String user2 = System.getenv("USER2");
 
         System.out.println("User 1: "+user1);
         System.out.println("User 2: "+user2);
